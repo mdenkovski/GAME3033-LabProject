@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4682851557607863506}
-  - component: {fileID: 8137442360877781636}
+  - component: {fileID: 6014775228643610960}
   m_Layer: 0
   m_Name: AK47
   m_TagString: Untagged
@@ -63,7 +63,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8137442360877781636
+--- !u!114 &6014775228643610960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -72,10 +72,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 947097414153082207}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a81d74d63209a43aea42cd10b35ceb, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d530337bd167cf4cbf50a7747309f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   GripIKLocation: {fileID: 628384121197080384}
+  WeaponStats:
+    WeaponType: 2
+    WeaponName: AK-47
+    Damage: 20
+    BulletsInClip: 10
+    ClipSize: 20
+    BulletsAvailable: 20
+    FireStartDelay: 0
+    FireRate: 0.2
+    FireDistance: 100
+    Repeating: 1
+    WeaponHitLayer:
+      serializedVersion: 2
+      m_Bits: 55
 --- !u!1001 &8270604631807880869
 PrefabInstance:
   m_ObjectHideFlags: 0

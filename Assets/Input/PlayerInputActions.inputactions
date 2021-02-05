@@ -34,15 +34,7 @@
                     "type": "Value",
                     "id": "03439552-ab3c-4729-a4c0-73764a9fed49",
                     "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Lock",
-                    "type": "Button",
-                    "id": "3142f598-036c-4f2b-8366-befbc863d860",
-                    "expectedControlType": "Button",
-                    "processors": "",
+                    "processors": "NormalizeVector2",
                     "interactions": ""
                 },
                 {
@@ -148,17 +140,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "91cae0bd-fd23-4800-9885-49ac60553f17",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Lock",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

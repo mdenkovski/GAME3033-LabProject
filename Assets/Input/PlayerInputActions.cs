@@ -47,15 +47,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""03439552-ab3c-4729-a4c0-73764a9fed49"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Lock"",
-                    ""type"": ""Button"",
-                    ""id"": ""3142f598-036c-4f2b-8366-befbc863d860"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
+                    ""processors"": ""NormalizeVector2"",
                     ""interactions"": """"
                 },
                 {
@@ -166,17 +158,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""91cae0bd-fd23-4800-9885-49ac60553f17"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Lock"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""ea1e67dd-6f3d-402e-976a-d85191cbc75b"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": ""Press(behavior=2)"",
@@ -208,7 +189,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_PlayerActionMap_Jump = m_PlayerActionMap.FindAction("Jump", throwIfNotFound: true);
         m_PlayerActionMap_Run = m_PlayerActionMap.FindAction("Run", throwIfNotFound: true);
         m_PlayerActionMap_Look = m_PlayerActionMap.FindAction("Look", throwIfNotFound: true);
-        m_PlayerActionMap_Lock = m_PlayerActionMap.FindAction("Lock", throwIfNotFound: true);
         m_PlayerActionMap_Fire = m_PlayerActionMap.FindAction("Fire", throwIfNotFound: true);
         m_PlayerActionMap_Reload = m_PlayerActionMap.FindAction("Reload", throwIfNotFound: true);
     }
@@ -264,7 +244,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerActionMap_Jump;
     private readonly InputAction m_PlayerActionMap_Run;
     private readonly InputAction m_PlayerActionMap_Look;
-    private readonly InputAction m_PlayerActionMap_Lock;
     private readonly InputAction m_PlayerActionMap_Fire;
     private readonly InputAction m_PlayerActionMap_Reload;
     public struct PlayerActionMapActions
@@ -275,7 +254,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_PlayerActionMap_Jump;
         public InputAction @Run => m_Wrapper.m_PlayerActionMap_Run;
         public InputAction @Look => m_Wrapper.m_PlayerActionMap_Look;
-        public InputAction @Lock => m_Wrapper.m_PlayerActionMap_Lock;
         public InputAction @Fire => m_Wrapper.m_PlayerActionMap_Fire;
         public InputAction @Reload => m_Wrapper.m_PlayerActionMap_Reload;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActionMap; }
@@ -299,9 +277,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Look.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnLook;
                 @Look.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnLook;
                 @Look.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnLook;
-                @Lock.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnLock;
-                @Lock.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnLock;
-                @Lock.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnLock;
                 @Fire.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnFire;
                 @Fire.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnFire;
                 @Fire.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnFire;
@@ -324,9 +299,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
-                @Lock.started += instance.OnLock;
-                @Lock.performed += instance.OnLock;
-                @Lock.canceled += instance.OnLock;
                 @Fire.started += instance.OnFire;
                 @Fire.performed += instance.OnFire;
                 @Fire.canceled += instance.OnFire;
@@ -343,7 +315,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
-        void OnLock(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
     }
