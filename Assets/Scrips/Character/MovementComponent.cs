@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 
@@ -16,10 +17,15 @@ public class MovementComponent : MonoBehaviour
     [SerializeField] private float RunSpeed;
     [SerializeField] private float JumpForce;
 
+    [SerializeField] private LayerMask JumpLayerMask;
+    [SerializeField] private float JumpThreshold = 0.1f;
+    [SerializeField] private float JumpLandingCheckDelay = 0.0f;
+
     //components
     private PlayerController PlayerController;
     private Animator PlayerAnimator;
     private Rigidbody PlayerRigidbody;
+    private NavMeshAgent PlayerNavMeshAgent;
 
     //references
     private Transform PlayerTransform;
@@ -41,6 +47,7 @@ public class MovementComponent : MonoBehaviour
         PlayerController = GetComponent<PlayerController>();
         PlayerAnimator = GetComponent<Animator>();
         PlayerRigidbody = GetComponent<Rigidbody>();
+        PlayerNavMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     public void OnMovement(InputValue value)
@@ -60,15 +67,43 @@ public class MovementComponent : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
+        if (PlayerController.IsJumping) return;
+
+        PlayerNavMeshAgent.isStopped = true;
+        PlayerNavMeshAgent.enabled = false;
+
+        //jump
         PlayerController.IsJumping = value.isPressed;
         PlayerAnimator.SetBool(IsJumpingHash, value.isPressed);
-
-
         PlayerRigidbody.AddForce((PlayerTransform.up + MoveDirection) * JumpForce , ForceMode.Impulse);
 
+        InvokeRepeating(nameof(LandingCheck), JumpLandingCheckDelay, 0.1f);
 
     }
 
+
+    private void LandingCheck()
+    {
+        //Debug.DrawLine(transform.position, transform.position + (-transform.up* 100.0f), Color.red, 0.1f);
+
+
+        if (!Physics.Raycast(transform.position, -transform.up, 
+            out RaycastHit hit, 100.0f, JumpLayerMask)) return;
+        
+        Debug.Log(hit.distance);
+
+        if (!(hit.distance < JumpThreshold) || !PlayerController.IsJumping) return;
+            
+        PlayerNavMeshAgent.enabled = true;
+        PlayerNavMeshAgent.isStopped = false;
+
+        PlayerController.IsJumping = false;
+        PlayerAnimator.SetBool(IsJumpingHash, false);
+
+        CancelInvoke(nameof(LandingCheck));
+            
+        
+    }
 
     private void Update()
     {
@@ -83,21 +118,25 @@ public class MovementComponent : MonoBehaviour
 
         Vector3 movementDirection = MoveDirection * (currentSpeed * Time.deltaTime);
 
-        PlayerTransform.position += movementDirection;
+
+        PlayerNavMeshAgent.Move(movementDirection);
+        
+        //old way without nav mesh
+        //PlayerTransform.position += movementDirection;
 
 
 
     }
 
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (!collision.gameObject.CompareTag("Ground") && !PlayerController.IsJumping) return;
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    //if (!collision.gameObject.CompareTag("Ground") && !PlayerController.IsJumping) return;
         
-        PlayerController.IsJumping = false;
-        PlayerAnimator.SetBool(IsJumpingHash, false);
+    //    PlayerController.IsJumping = false;
+    //    PlayerAnimator.SetBool(IsJumpingHash, false);
         
-    }
+    //}
 
     //PlayerInputActions PlayerActions;
 

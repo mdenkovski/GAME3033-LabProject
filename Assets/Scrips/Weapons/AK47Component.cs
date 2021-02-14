@@ -16,6 +16,12 @@ namespace Wepaons
             {
                 base.FireWeapon();
 
+                if(!FiringEffect)
+                {
+                    FiringEffect = Instantiate(FiringAnimation, ParticleSpawnLocation).GetComponent<ParticleSystem>(); ;
+                }
+
+
                 Ray screenRay = MainCamera.ScreenPointToRay(new Vector3(CrosshoarComponent.CurrentAimPosition.x, CrosshoarComponent.CurrentAimPosition.y,0));
 
                 if (!Physics.Raycast(screenRay, out RaycastHit hit, WeaponStats.FireDistance, WeaponStats.WeaponHitLayer)) return;
