@@ -19,7 +19,8 @@ public class MovementComponent : MonoBehaviour
 
     [SerializeField] private LayerMask JumpLayerMask;
     [SerializeField] private float JumpThreshold = 0.1f;
-    [SerializeField] private float JumpLandingCheckDelay = 0.0f;
+    [SerializeField] private float JumpLandingCheckDelay = 0.1f;
+    [SerializeField] private float MoveDirectionBuffer = 10.0f;
 
     //components
     private PlayerController PlayerController;
@@ -29,6 +30,9 @@ public class MovementComponent : MonoBehaviour
 
     //references
     private Transform PlayerTransform;
+
+
+    private Vector3 NextPositionCheck;
 
     private Vector2 InputVector = Vector2.zero;
     private Vector3 MoveDirection = Vector3.zero;
@@ -69,15 +73,15 @@ public class MovementComponent : MonoBehaviour
     {
         if (PlayerController.IsJumping) return;
 
-        PlayerNavMeshAgent.isStopped = true;
-        PlayerNavMeshAgent.enabled = false;
+        //PlayerNavMeshAgent.isStopped = true;
+        //PlayerNavMeshAgent.enabled = false;
 
         //jump
         PlayerController.IsJumping = value.isPressed;
         PlayerAnimator.SetBool(IsJumpingHash, value.isPressed);
         PlayerRigidbody.AddForce((PlayerTransform.up + MoveDirection) * JumpForce , ForceMode.Impulse);
 
-        InvokeRepeating(nameof(LandingCheck), JumpLandingCheckDelay, 0.1f);
+       // InvokeRepeating(nameof(LandingCheck), JumpLandingCheckDelay, 0.1f);
 
     }
 
@@ -109,7 +113,7 @@ public class MovementComponent : MonoBehaviour
     {
         if (PlayerController.IsJumping) return;
 
-        if (!(InputVector.magnitude > 0)) MoveDirection = Vector3.zero;
+        //if (!(InputVector.magnitude > 0)) MoveDirection = Vector3.zero;
 
         
         MoveDirection = transform.forward * InputVector.y + transform.right * InputVector.x;
@@ -119,7 +123,17 @@ public class MovementComponent : MonoBehaviour
         Vector3 movementDirection = MoveDirection * (currentSpeed * Time.deltaTime);
 
 
-        PlayerNavMeshAgent.Move(movementDirection);
+        //Vector3 newPosition = transform.position + MoveDirection;
+
+
+        NextPositionCheck = transform.position + MoveDirection * MoveDirectionBuffer;
+
+        if (NavMesh.SamplePosition(NextPositionCheck, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
+        {
+            transform.position += movementDirection;
+        }
+
+        //PlayerNavMeshAgent.Move(movementDirection);
         
         //old way without nav mesh
         //PlayerTransform.position += movementDirection;
@@ -128,15 +142,26 @@ public class MovementComponent : MonoBehaviour
 
     }
 
+   
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    //if (!collision.gameObject.CompareTag("Ground") && !PlayerController.IsJumping) return;
-        
-    //    PlayerController.IsJumping = false;
-    //    PlayerAnimator.SetBool(IsJumpingHash, false);
-        
-    //}
+    private void OnDrawGizmos()
+    {
+        if (NextPositionCheck != Vector3.zero)
+        {
+            Gizmos.DrawWireSphere(NextPositionCheck, 0.5f);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        //bool ground = collision.collider.CompareTag("Ground");
+        if (!collision.collider.CompareTag("Ground") && !PlayerController.IsJumping) return;
+
+        //Debug.Log(ground);
+        PlayerController.IsJumping = false;
+        PlayerAnimator.SetBool(IsJumpingHash, false);
+
+    }
 
     //PlayerInputActions PlayerActions;
 

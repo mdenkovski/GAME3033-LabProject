@@ -93,7 +93,7 @@ public class WeaponComponent : MonoBehaviour
 
     protected virtual void FireWeapon()
     {
-        Debug.Log("FiringWeapon");
+        //Debug.Log("FiringWeapon");
         WeaponStats.BulletsInClip--;
     }
 
