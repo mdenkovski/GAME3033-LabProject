@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[RequireComponent(typeof(PlayerHealthComponent))]
 public class PlayerController : MonoBehaviour
 {
     public CrossHairScript CrossHair => CrossHairComponent;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,8 @@ namespace Wepaons
 
                 HitLocation = hit.point;
 
+                TakeDamage(hit);
+
                 Vector3 hitDirection = hit.point - MainCamera.transform.position;
                 Debug.DrawRay(MainCamera.transform.position, hitDirection.normalized * WeaponStats.FireDistance, Color.red, 1.0f);
 
@@ -42,6 +45,12 @@ namespace Wepaons
 
 
             
+        }
+
+        private void TakeDamage(RaycastHit hitInfo)
+        {
+            IDamagable damagable = hitInfo.collider.GetComponent<IDamagable>();
+            damagable?.TakeDamage(WeaponInformation.Damage);
         }
 
         private void OnDrawGizmos()

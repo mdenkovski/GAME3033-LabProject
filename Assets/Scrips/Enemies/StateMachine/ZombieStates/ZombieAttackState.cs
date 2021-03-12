@@ -7,6 +7,8 @@ public class ZombieAttackState : ZombieStates
     private GameObject FollowTarget;
     private float AttackRange = 1.5f;
 
+
+    private IDamagable DamagableObject;
     public ZombieAttackState(GameObject followTarget, ZombieComponent zombie, StateMachine statemachine) : base(zombie, statemachine)
     {
         FollowTarget = followTarget;
@@ -22,12 +24,16 @@ public class ZombieAttackState : ZombieStates
 
         OwnerZombie.ZombieAnimator.SetBool("IsAttacking", true);
 
+        DamagableObject = FollowTarget.GetComponent<IDamagable>();
+
     }
 
     public override void IntervalUpdate()
     {
         base.IntervalUpdate();
-        //TODO: Add damage to the object
+       
+
+        DamagableObject?.TakeDamage(OwnerZombie.ZombieDamage);
     }
 
     public override void Update()
@@ -42,8 +48,8 @@ public class ZombieAttackState : ZombieStates
             StateMachine.ChangeState(ZombieStateType.Follow);
         }
 
-        //TODO zombie health < 0 die
     }
+
 
     public override void Exit()
     {
