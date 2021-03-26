@@ -5644,7 +5644,7 @@ GameObject:
   - component: {fileID: 1244161662}
   m_Layer: 6
   m_Name: SM_Chr_Criminal_Male_01
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5756,11 +5756,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cafb8291896f0847819cf1b5b0d71d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CrossHairComponent: {fileID: 0}
   IsFiring: 0
   IsReloading: 0
   IsJumping: 0
   IsRunning: 0
+  CrossHairComponent: {fileID: 0}
+  HealthComponent: {fileID: 0}
+  WeaponHolderComponent: {fileID: 0}
 --- !u!114 &2352878317634189648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5781,7 +5783,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   JumpThreshold: 0.09
   JumpLandingCheckDelay: 0.2
-  MoveDirectionBuffer: 2
+  MoveDirectionBuffer: 3
 --- !u!54 &2134234277
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5824,7 +5826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a81df26266cfb54481906077c7ea5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponToSpawn: {fileID: 947097414153082207, guid: e839fcc85a596f4499ed10a3a390537a, type: 3}
+  WeaponToSpawn: {fileID: 11400000, guid: 78a1d96176a156a4d877d7a3876c0d80, type: 2}
   WeaponSocketLocation: {fileID: 1991088188549895404}
 --- !u!114 &1531950345
 MonoBehaviour:
@@ -5876,7 +5878,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentHealth: 0
-  TotalHealth: 50
+  TotalHealth: 100
+  PotionItem: {fileID: 11400000, guid: b3fa86bf08ccfe64bbdcaafc4397e420, type: 2}
 --- !u!1 &1967717073864684
 GameObject:
   m_ObjectHideFlags: 0

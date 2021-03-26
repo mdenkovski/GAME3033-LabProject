@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class WeaponHolder : MonoBehaviour
 {
     [Header("Weapon To Spawn")]
     [SerializeField]
-    private GameObject WeaponToSpawn;
+    private WeaponScriptable WeaponToSpawn;
 
     [SerializeField]
     private Transform WeaponSocketLocation;
@@ -23,10 +24,40 @@ public class WeaponHolder : MonoBehaviour
     public PlayerController Controller => PlayerController;
     private PlayerController PlayerController;
     private CrossHairScript PlayerCrosshair;
+    public CrossHairScript Corsshair => PlayerCrosshair;
+
+    public void UnEquipItem()
+    {
+        Destroy(EquippedWeapon.gameObject);
+        EquippedWeapon = null;
+    }
+
     private Animator PlayerAnimator;
 
     //Ref
     private Camera ViewCamera;
+
+    public void EquipWeapon(WeaponScriptable weaponScriptable)
+    {
+        if (weaponScriptable == null) return;
+
+        GameObject spawnedWeapon = Instantiate(weaponScriptable.ItemPrefab, WeaponSocketLocation.position, WeaponSocketLocation.rotation, WeaponSocketLocation);
+
+        if (spawnedWeapon)
+        {
+            EquippedWeapon = spawnedWeapon.GetComponent<WeaponComponent>();
+            if (EquippedWeapon)
+            {
+                EquippedWeapon.Initialize(this, weaponScriptable);
+
+                PlayerEvents.Invoke_OnWEaponEquipped(EquippedWeapon);
+
+                GripIKLocation = EquippedWeapon.GripLocation;
+                PlayerAnimator.SetInteger(WeaponTypeHash, (int)EquippedWeapon.WeaponInformation.WeaponType);
+            }
+        }
+    }
+
     private WeaponComponent EquippedWeapon;
 
 
@@ -51,25 +82,29 @@ public class WeaponHolder : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       GameObject spawnedWeapon = Instantiate(WeaponToSpawn, WeaponSocketLocation.position, WeaponSocketLocation.rotation, WeaponSocketLocation);
+        EquipWeapon(WeaponToSpawn);
 
-        if (spawnedWeapon)
-        {
-            EquippedWeapon = spawnedWeapon.GetComponent<WeaponComponent>();
-            if (EquippedWeapon)
-            {
-                EquippedWeapon.Initialize(this, PlayerCrosshair);
+        //GameObject spawnedWeapon = Instantiate(WeaponToSpawn.ItemPrefab, WeaponSocketLocation.position, WeaponSocketLocation.rotation, WeaponSocketLocation);
 
-                PlayerEvents.Invoke_OnWEaponEquipped(EquippedWeapon);
+        //if (spawnedWeapon)
+        //{
+        //    EquippedWeapon = spawnedWeapon.GetComponent<WeaponComponent>();
+        //    if (EquippedWeapon)
+        //    {
+        //        EquippedWeapon.Initialize(this, WeaponToSpawn);
 
-                GripIKLocation = EquippedWeapon.GripLocation;
-                PlayerAnimator.SetInteger(WeaponTypeHash, (int)EquippedWeapon.WeaponInformation.WeaponType);
-            }
-        }
+        //        PlayerEvents.Invoke_OnWEaponEquipped(EquippedWeapon);
+
+        //        GripIKLocation = EquippedWeapon.GripLocation;
+        //        PlayerAnimator.SetInteger(WeaponTypeHash, (int)EquippedWeapon.WeaponInformation.WeaponType);
+        //    }
+        //}
     }
 
     private void OnAnimatorIK(int layerIndex)
     {
+        if (GripIKLocation == null) return;
+
         PlayerAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1.0f);
         PlayerAnimator.SetIKPosition(AvatarIKGoal.LeftHand, GripIKLocation.position);
     }
@@ -77,6 +112,7 @@ public class WeaponHolder : MonoBehaviour
 
     public void OnReload(InputValue pressed)
     {
+        if (EquippedWeapon == null) return;
 
         StartReloading();
 
@@ -84,6 +120,7 @@ public class WeaponHolder : MonoBehaviour
 
     public void StartReloading()
     {
+        if (EquippedWeapon == null) return;
 
         if (EquippedWeapon.WeaponInformation.BulletsAvailable <= 0 && PlayerController.IsFiring)
         {
@@ -109,6 +146,8 @@ public class WeaponHolder : MonoBehaviour
 
     public void StopReloading()
     {
+        if (EquippedWeapon == null) return;
+
         if (PlayerAnimator.GetBool(IsReloadingHash)) return;
 
         PlayerController.IsReloading = false;
@@ -138,6 +177,9 @@ public class WeaponHolder : MonoBehaviour
     }
     private void StartFiring()
     {
+        if (EquippedWeapon == null) return;
+
+
         //TODO: wepon seems to reload after no bullets left
         if (EquippedWeapon.WeaponInformation.BulletsAvailable <= 0 && EquippedWeapon.WeaponInformation.BulletsInClip <= 0) return;
         PlayerController.IsFiring = true;
@@ -148,6 +190,8 @@ public class WeaponHolder : MonoBehaviour
 
     private void StopFiring()
     {
+        if (EquippedWeapon == null) return;
+
         PlayerController.IsFiring = false;
         PlayerAnimator.SetBool(IsFiringHash, false);
         EquippedWeapon.StopFiringWeapon();
