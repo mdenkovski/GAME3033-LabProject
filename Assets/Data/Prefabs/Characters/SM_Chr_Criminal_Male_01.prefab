@@ -5642,6 +5642,7 @@ GameObject:
   - component: {fileID: 1531950345}
   - component: {fileID: 6210707331537133870}
   - component: {fileID: 1244161662}
+  - component: {fileID: 537391599}
   m_Layer: 6
   m_Name: SM_Chr_Criminal_Male_01
   m_TagString: Player
@@ -5826,7 +5827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a81df26266cfb54481906077c7ea5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponToSpawn: {fileID: 11400000, guid: 78a1d96176a156a4d877d7a3876c0d80, type: 2}
+  WeaponToSpawn: {fileID: 0}
   WeaponSocketLocation: {fileID: 1991088188549895404}
 --- !u!114 &1531950345
 MonoBehaviour:
@@ -5879,7 +5880,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentHealth: 0
   TotalHealth: 100
-  PotionItem: {fileID: 11400000, guid: b3fa86bf08ccfe64bbdcaafc4397e420, type: 2}
+--- !u!114 &537391599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1962457702341656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b35a674f94ade004da265649191c3ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Items: []
+  Controller: {fileID: 0}
 --- !u!1 &1967717073864684
 GameObject:
   m_ObjectHideFlags: 0

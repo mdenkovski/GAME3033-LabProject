@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour, IPausable
     public bool IsReloading;
     public bool IsJumping;
     public bool IsRunning;
+    public bool InInventory;
     public CrossHairScript CrossHair => CrossHairComponent;
     [SerializeField] private CrossHairScript CrossHairComponent;
 
@@ -19,10 +21,15 @@ public class PlayerController : MonoBehaviour, IPausable
     public HealthComponent Health => HealthComponent;
     [SerializeField] private HealthComponent HealthComponent;
 
+    public InventoryComponent Inventory => InventoryComponent;
+    [SerializeField] private InventoryComponent InventoryComponent;
+
+
     public WeaponHolder WeaponHolder => WeaponHolderComponent;
     [SerializeField] private WeaponHolder WeaponHolderComponent;
 
-
+   // [SerializeField]
+   // private ConsummableScript Consume;
 
 
     private GameUIController UIController;
@@ -40,6 +47,10 @@ public class PlayerController : MonoBehaviour, IPausable
         {
             WeaponHolderComponent = GetComponent<WeaponHolder>();
         }
+        if (Inventory == null)
+        {
+            InventoryComponent = GetComponent<InventoryComponent>();
+        }
     }
 
     public void OnPauseGame(InputValue value)
@@ -53,6 +64,39 @@ public class PlayerController : MonoBehaviour, IPausable
         Debug.Log("UnPause Game");
         PauseManager.Instance.UnPauseGame();
 
+    }
+
+    public void OnInventory(InputValue button)
+    {
+        Debug.Log("Inventory Selected");
+        if (InInventory)
+        {
+            OpenInventory(false);
+        }
+        else
+        {
+            OpenInventory(true);
+
+        }
+
+        InInventory = !InInventory;
+        
+    }
+
+    private void OpenInventory(bool open)
+    {
+        if (open)
+        {
+            PauseManager.Instance.PauseGame();
+            UIController.EnableInventoryMenu();
+
+        }
+        else
+        {
+            PauseManager.Instance.UnPauseGame();
+            UIController.EnableGameMenu();
+
+        }
     }
 
     public void PauseMenu()

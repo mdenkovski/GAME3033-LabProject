@@ -82,7 +82,7 @@ public class WeaponHolder : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EquipWeapon(WeaponToSpawn);
+        if (WeaponToSpawn) EquipWeapon(WeaponToSpawn);
 
         //GameObject spawnedWeapon = Instantiate(WeaponToSpawn.ItemPrefab, WeaponSocketLocation.position, WeaponSocketLocation.rotation, WeaponSocketLocation);
 
@@ -164,6 +164,8 @@ public class WeaponHolder : MonoBehaviour
 
     public void OnFire(InputValue pressed)
     {
+        if (EquippedWeapon == null) return;
+
         FiringPressed = pressed.isPressed;
         if (pressed.isPressed)
         {

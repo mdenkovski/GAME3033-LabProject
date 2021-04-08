@@ -13,7 +13,7 @@ public class ConsummableScript : ItemScriptable
 
         controller.Health.HealPlayer(Effect);
 
-        ChangeAmount(-1);
+        SetAmount(Amount -1);
         if (Amount <= 0)
         {
             DeleteItem(controller);
