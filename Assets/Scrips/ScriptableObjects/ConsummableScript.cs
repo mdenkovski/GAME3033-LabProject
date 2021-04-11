@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [CreateAssetMenu(fileName = "Consumable", menuName = "Items/Consumable", order = 1)]
 public class ConsummableScript : ItemScriptable
@@ -18,5 +19,16 @@ public class ConsummableScript : ItemScriptable
         {
             DeleteItem(controller);
         }
+    }
+}
+[Serializable]
+public class ItemSaveData : SaveDataBase
+{
+    public int Amount;
+
+    public ItemSaveData(ItemScriptable item)
+    {
+        Name = item.Name;
+        Amount = item.Amount;
     }
 }

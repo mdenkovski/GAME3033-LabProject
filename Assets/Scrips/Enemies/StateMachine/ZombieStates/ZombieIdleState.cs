@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ZombieIdleState : ZombieStates
 {
-    public ZombieIdleState(ZombieComponent zombie, StateMachine statemachine) : base(zombie, statemachine)
+    public ZombieIdleState(ZombieComponent zombie, ZombieStateMachine statemachine) : base(zombie, statemachine)
     {
     }
 

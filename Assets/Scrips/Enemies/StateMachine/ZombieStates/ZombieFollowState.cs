@@ -7,7 +7,7 @@ public class ZombieFollowState : ZombieStates
     private readonly GameObject FollowTarget;
     private const float StopDistance = 1f;
 
-    public ZombieFollowState(GameObject followTarget, ZombieComponent zombie, StateMachine statemachine) : base(zombie, statemachine)
+    public ZombieFollowState(GameObject followTarget, ZombieComponent zombie, ZombieStateMachine statemachine) : base(zombie, statemachine)
     {
         FollowTarget = followTarget;
         UpdateInterval = 2.0f;

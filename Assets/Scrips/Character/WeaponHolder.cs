@@ -28,8 +28,8 @@ public class WeaponHolder : MonoBehaviour
 
     public void UnEquipItem()
     {
-        Destroy(EquippedWeapon.gameObject);
-        EquippedWeapon = null;
+        Destroy(WeaponComponent.gameObject);
+        WeaponComponent = null;
     }
 
     private Animator PlayerAnimator;
@@ -45,20 +45,20 @@ public class WeaponHolder : MonoBehaviour
 
         if (spawnedWeapon)
         {
-            EquippedWeapon = spawnedWeapon.GetComponent<WeaponComponent>();
-            if (EquippedWeapon)
+            WeaponComponent = spawnedWeapon.GetComponent<WeaponComponent>();
+            if (WeaponComponent)
             {
-                EquippedWeapon.Initialize(this, weaponScriptable);
+                WeaponComponent.Initialize(this, weaponScriptable);
 
-                PlayerEvents.Invoke_OnWEaponEquipped(EquippedWeapon);
+                PlayerEvents.Invoke_OnWEaponEquipped(WeaponComponent);
 
-                GripIKLocation = EquippedWeapon.GripLocation;
-                PlayerAnimator.SetInteger(WeaponTypeHash, (int)EquippedWeapon.WeaponInformation.WeaponType);
+                GripIKLocation = WeaponComponent.GripLocation;
+                PlayerAnimator.SetInteger(WeaponTypeHash, (int)WeaponComponent.WeaponInformation.WeaponType);
             }
         }
     }
-
-    private WeaponComponent EquippedWeapon;
+    public WeaponComponent EquippedWeapon => WeaponComponent;
+    private WeaponComponent WeaponComponent;
 
 
     private static readonly int AimHorizontalHash = Animator.StringToHash("AimHorizontal");
@@ -112,7 +112,7 @@ public class WeaponHolder : MonoBehaviour
 
     public void OnReload(InputValue pressed)
     {
-        if (EquippedWeapon == null) return;
+        if (WeaponComponent == null) return;
 
         StartReloading();
 
@@ -120,9 +120,9 @@ public class WeaponHolder : MonoBehaviour
 
     public void StartReloading()
     {
-        if (EquippedWeapon == null) return;
+        if (WeaponComponent == null) return;
 
-        if (EquippedWeapon.WeaponInformation.BulletsAvailable <= 0 && PlayerController.IsFiring)
+        if (WeaponComponent.WeaponInformation.BulletsAvailable <= 0 && PlayerController.IsFiring)
         {
             StopFiring();
             return;
@@ -139,19 +139,19 @@ public class WeaponHolder : MonoBehaviour
 
         PlayerController.IsReloading = true;
         PlayerAnimator.SetBool(IsReloadingHash, true);
-        EquippedWeapon.StartReloading();
+        WeaponComponent.StartReloading();
 
         InvokeRepeating(nameof(StopReloading), 0.0f, 0.1f);
     }
 
     public void StopReloading()
     {
-        if (EquippedWeapon == null) return;
+        if (WeaponComponent == null) return;
 
         if (PlayerAnimator.GetBool(IsReloadingHash)) return;
 
         PlayerController.IsReloading = false;
-        EquippedWeapon.StopReloading();
+        WeaponComponent.StopReloading();
         CancelInvoke(nameof(StopReloading));
 
         if (WasFiring && FiringPressed)
@@ -164,7 +164,7 @@ public class WeaponHolder : MonoBehaviour
 
     public void OnFire(InputValue pressed)
     {
-        if (EquippedWeapon == null) return;
+        if (WeaponComponent == null) return;
 
         FiringPressed = pressed.isPressed;
         if (pressed.isPressed)
@@ -179,24 +179,24 @@ public class WeaponHolder : MonoBehaviour
     }
     private void StartFiring()
     {
-        if (EquippedWeapon == null) return;
+        if (WeaponComponent == null) return;
 
 
         //TODO: wepon seems to reload after no bullets left
-        if (EquippedWeapon.WeaponInformation.BulletsAvailable <= 0 && EquippedWeapon.WeaponInformation.BulletsInClip <= 0) return;
+        if (WeaponComponent.WeaponInformation.BulletsAvailable <= 0 && WeaponComponent.WeaponInformation.BulletsInClip <= 0) return;
         PlayerController.IsFiring = true;
         PlayerAnimator.SetBool(IsFiringHash, true);
-        EquippedWeapon.StartFiringWeapon();
+        WeaponComponent.StartFiringWeapon();
     }
 
 
     private void StopFiring()
     {
-        if (EquippedWeapon == null) return;
+        if (WeaponComponent == null) return;
 
         PlayerController.IsFiring = false;
         PlayerAnimator.SetBool(IsFiringHash, false);
-        EquippedWeapon.StopFiringWeapon();
+        WeaponComponent.StopFiringWeapon();
 
     }
 

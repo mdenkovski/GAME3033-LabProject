@@ -3,28 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[RequireComponent(typeof(ZombieSpawnerStateMachine))]
 public class ZombieSpawner : MonoBehaviour
 {
 
     [SerializeField]
     private int NumberOfZombiesToSpawn;
 
-    [SerializeField]
-    private GameObject[] ZombiePrefab;
+    public GameObject[] ZombiePrefab;
 
-    [SerializeField]
-    private SpawnerVolume[] SpawnVolume;
+    public SpawnerVolume[] SpawnVolume;
 
+    public GameObject FollowTarget => FollowGameObject;
     private GameObject FollowGameObject;
+
+    private ZombieSpawnerStateMachine StateMachine;
 
     // Start is called before the first frame update
     void Start()
     {
         FollowGameObject = GameObject.FindGameObjectWithTag("Player");
-        for (int index = 0; index < NumberOfZombiesToSpawn; index++)
+
+
+        StateMachine = GetComponent<ZombieSpawnerStateMachine>();
+        ZombieWaveState BeginnerWave = new ZombieWaveState(this, StateMachine)
         {
-            SpawnZombie();
-        }
+            ZombiesToSpawn = 10,
+            NextState = SpawnerStateEnum.Complete
+        };
+
+        StateMachine.AddState(SpawnerStateEnum.Beginner, BeginnerWave);
+        StateMachine.Initialize(SpawnerStateEnum.Beginner);
+
+
     }
 
     private void SpawnZombie()
@@ -41,5 +53,5 @@ public class ZombieSpawner : MonoBehaviour
 
 
     }
-    
+
 }

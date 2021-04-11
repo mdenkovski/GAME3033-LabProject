@@ -9,7 +9,7 @@ public class ZombieAttackState : ZombieStates
 
 
     private IDamagable DamagableObject;
-    public ZombieAttackState(GameObject followTarget, ZombieComponent zombie, StateMachine statemachine) : base(zombie, statemachine)
+    public ZombieAttackState(GameObject followTarget, ZombieComponent zombie, ZombieStateMachine statemachine) : base(zombie, statemachine)
     {
         FollowTarget = followTarget;
         UpdateInterval = 2.0f; //this will be our attack interval

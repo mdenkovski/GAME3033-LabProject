@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 [CreateAssetMenu(fileName ="Weapon", menuName ="Items/Weapon", order =2)]
 public class WeaponScriptable : EquipableScriptable
@@ -17,5 +18,17 @@ public class WeaponScriptable : EquipableScriptable
         }
 
         base.UseItem(controller);
+    }
+}
+[Serializable]
+public class weaponSaveData : SaveDataBase
+{
+
+    public WeaponStats WeaponStats;
+
+    public weaponSaveData(WeaponStats weaponStats)
+    {
+        Name = weaponStats.WeaponName;
+        WeaponStats = weaponStats;
     }
 }

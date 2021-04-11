@@ -1,7 +1,7 @@
-﻿public class ZombieStates : State
+﻿public class ZombieStates : State<ZombieStateType>
 {
     protected ZombieComponent OwnerZombie;
-    public ZombieStates(ZombieComponent zombie, StateMachine statemachine) : base(statemachine)
+    public ZombieStates(ZombieComponent zombie, ZombieStateMachine statemachine) : base(statemachine)
     {
         OwnerZombie = zombie;
     }

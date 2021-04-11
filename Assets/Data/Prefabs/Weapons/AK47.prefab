@@ -80,7 +80,7 @@ MonoBehaviour:
   ParticleSpawnLocation: {fileID: 7801977123905231871}
   WeaponStats:
     WeaponType: 2
-    WeaponName: AK-47
+    WeaponName: AK47
     Damage: 20
     BulletsInClip: 10
     ClipSize: 20

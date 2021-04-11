@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 962a4374c5422034fb39d2b365582703, type: 3}
   m_Name: AK47
   m_EditorClassIdentifier: 
-  Name: Item
+  Name: AK47
   ItemCategory: 1
   ItemPrefab: {fileID: 947097414153082207, guid: e839fcc85a596f4499ed10a3a390537a, type: 3}
   Stackable: 0

@@ -43,4 +43,8 @@ public class HealthComponent : MonoBehaviour, IDamagable
         }
     }
 
+    internal void SetCurrentHealth(float health)
+    {
+        CurrentHealth = health;
+    }
 }
