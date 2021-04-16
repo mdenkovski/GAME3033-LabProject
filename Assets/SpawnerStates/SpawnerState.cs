@@ -22,7 +22,13 @@ public class SpawnerState : State<SpawnerStateEnum>
 
 
         zombie.GetComponent<ZombieComponent>().Initialize(Spawner.FollowTarget);
-
+        zombie.GetComponent<HealthComponent>().OnDeath += OnZombieDeath;
 
     }
+
+    protected virtual void OnZombieDeath()
+    {
+
+    }
+
 }

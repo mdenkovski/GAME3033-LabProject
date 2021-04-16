@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealthComponent : HealthComponent
 {
@@ -14,4 +15,9 @@ public class PlayerHealthComponent : HealthComponent
         PlayerEvents.Invoke_OnHealthInitialized(this);
     }
 
+    public override void Destroy()
+    {
+        base.Destroy();
+        SceneManager.LoadScene("Main Menu");
+    }
 }

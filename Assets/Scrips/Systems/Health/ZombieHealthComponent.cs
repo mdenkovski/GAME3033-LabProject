@@ -13,7 +13,8 @@ public class ZombieHealthComponent : HealthComponent
 
     public override void Destroy()
     {
-        //base.Destroy();
+        base.Destroy();
         ZombieStateMachine.ChangeState(ZombieStateType.Dead);
+        gameObject.GetComponent<Collider>().enabled = false;
     }
 }

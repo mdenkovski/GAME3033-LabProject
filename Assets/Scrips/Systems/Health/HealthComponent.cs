@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class HealthComponent : MonoBehaviour, IDamagable
 {
+    public delegate void OnDeathEvent();
+    public event OnDeathEvent OnDeath;
+
+
     [SerializeField]
     private float CurrentHealth;
     [SerializeField]
@@ -31,7 +35,9 @@ public class HealthComponent : MonoBehaviour, IDamagable
 
     public virtual  void Destroy()
     {
-        Destroy(gameObject);
+
+        OnDeath?.Invoke();
+        //Destroy(gameObject);
     }
 
     public virtual void TakeDamage(float damage)
@@ -47,4 +53,6 @@ public class HealthComponent : MonoBehaviour, IDamagable
     {
         CurrentHealth = health;
     }
+
+
 }

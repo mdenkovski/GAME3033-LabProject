@@ -1,12 +1,17 @@
 
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 
 [RequireComponent(typeof(ZombieSpawnerStateMachine))]
-public class ZombieSpawner : MonoBehaviour
+public class ZombieSpawner : MonoBehaviour , ISavable
 {
+
+    public delegate void WaveComplete(SpawnerStateEnum currentState);
+    public event WaveComplete OnWaveComplete;
+
 
     [SerializeField]
     private int NumberOfZombiesToSpawn;
@@ -20,29 +25,44 @@ public class ZombieSpawner : MonoBehaviour
 
     private ZombieSpawnerStateMachine StateMachine;
 
+    private SpawnerStateEnum StartingState = SpawnerStateEnum.Beginner;
+
     // Start is called before the first frame update
     void Start()
     {
         FollowGameObject = GameObject.FindGameObjectWithTag("Player");
-
-
         StateMachine = GetComponent<ZombieSpawnerStateMachine>();
+
+
         ZombieWaveState BeginnerWave = new ZombieWaveState(this, StateMachine)
+        {
+            ZombiesToSpawn = 5,
+            NextState = SpawnerStateEnum.Intermediate
+        };
+        StateMachine.AddState(SpawnerStateEnum.Beginner, BeginnerWave);
+
+        ZombieWaveState IntermediateWave = new ZombieWaveState(this, StateMachine)
         {
             ZombiesToSpawn = 10,
             NextState = SpawnerStateEnum.Complete
         };
+        StateMachine.AddState(SpawnerStateEnum.Intermediate, IntermediateWave);
 
-        StateMachine.AddState(SpawnerStateEnum.Beginner, BeginnerWave);
-        StateMachine.Initialize(SpawnerStateEnum.Beginner);
 
+        StateMachine.Initialize(StartingState);
+
+    }
+
+    public void CompleteWave(SpawnerStateEnum nextState)
+    {
+        OnWaveComplete?.Invoke(nextState);
 
     }
 
     private void SpawnZombie()
     {
-        GameObject ZombieToSpawn = ZombiePrefab[Random.Range(0, ZombiePrefab.Length)];
-        SpawnerVolume spawnVolume = SpawnVolume[Random.Range(0, SpawnVolume.Length)];
+        GameObject ZombieToSpawn = ZombiePrefab[UnityEngine.Random.Range(0, ZombiePrefab.Length)];
+        SpawnerVolume spawnVolume = SpawnVolume[UnityEngine.Random.Range(0, SpawnVolume.Length)];
 
         if (!FollowGameObject) return;
 
@@ -54,4 +74,29 @@ public class ZombieSpawner : MonoBehaviour
 
     }
 
+    public SaveDataBase SaveData()
+    {
+        SpawnerSaveData saveData = new SpawnerSaveData
+        {
+            Name = gameObject.name,
+            CurrentState = StateMachine.ActiveEnumState
+
+        };
+        return saveData;
+    }
+
+    public void LoadData(SaveDataBase saveData)
+    {
+        SpawnerSaveData spawnerSaveData = (SpawnerSaveData)saveData;
+        StartingState = spawnerSaveData.CurrentState;
+    }
+
+    
+
+}
+
+[Serializable]
+public class SpawnerSaveData : SaveDataBase
+{
+    public SpawnerStateEnum CurrentState;
 }

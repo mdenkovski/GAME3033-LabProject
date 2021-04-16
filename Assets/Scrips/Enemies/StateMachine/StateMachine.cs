@@ -5,6 +5,7 @@ using System;
 
 public class StateMachine<T> : MonoBehaviour where T : Enum
 {
+    public T ActiveEnumState { get; private set; }
     public State<T> CurrentState { get; private set; }
 
     protected Dictionary<T, State<T>> States;
@@ -50,6 +51,7 @@ public class StateMachine<T> : MonoBehaviour where T : Enum
 
         if (!States.ContainsKey(nextState)) return;
 
+        ActiveEnumState = nextState;
         CurrentState = States[nextState];
         CurrentState.Start();
 

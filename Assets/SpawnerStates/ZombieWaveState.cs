@@ -6,7 +6,9 @@ public class ZombieWaveState : SpawnerState
 {
 
     public int ZombiesToSpawn = 5;
-    public SpawnerStateEnum NextState = SpawnerStateEnum.Complete;
+    public SpawnerStateEnum NextState = SpawnerStateEnum.Intermediate;
+    private int TotalZombiesKilled = 0;
+
     public ZombieWaveState(ZombieSpawner spawner, StateMachine<SpawnerStateEnum> stateMachine) : base(spawner, stateMachine)
     {
     }
@@ -18,5 +20,16 @@ public class ZombieWaveState : SpawnerState
         {
             SpawnZombie();
         }
+    }
+
+    protected override void OnZombieDeath()
+    {
+        base.OnZombieDeath();
+        Debug.Log("Zombie Killed");
+        TotalZombiesKilled++;
+        if (TotalZombiesKilled < ZombiesToSpawn) return;
+
+        StateMachine.ChangeState(NextState);
+        Spawner.CompleteWave(NextState);
     }
 }
